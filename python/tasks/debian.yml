@@ -1,0 +1,4 @@
+- name: installing python
+  apt:
+    name: "{{ python_version_ubuntu }}"
+    state: present

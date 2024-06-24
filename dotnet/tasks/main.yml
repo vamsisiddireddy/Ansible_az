@@ -1,0 +1,5 @@
+---
+# tasks file for Dotnet
+- name: Installing dotnet
+  import_tasks: debian.yml
+  when: ansible_os_family == "Debian" 

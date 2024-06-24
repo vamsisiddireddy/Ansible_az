@@ -1,0 +1,4 @@
+---
+# defaults file for maven
+req_url: "https://dlcdn.apache.org/maven/maven-3/{{ version }}/binaries/apache-maven-3.9.6-bin.tar.gz"
+version: 3.9.6

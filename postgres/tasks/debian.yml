@@ -1,0 +1,56 @@
+---
+- name: Update apt package cache
+  apt:
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install acl
+  apt:
+    name: acl
+    state: present
+
+- name: Install PostgreSQL and required dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - postgresql
+    - python3-psycopg2
+  when: ansible_os_family == 'Debian'
+
+- name: Start PostgreSQL service
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Create PostgreSQL database "my_db"
+  postgresql_db:
+    name: my_db
+    state: present
+  become: yes
+  become_user: postgres
+  become_method: sudo
+
+- name: Ensure the PostgreSQL user exists and grant privileges
+  postgresql_user:
+    name: test
+    password: test123
+    db: my_db
+    priv: "ALL"
+  become: yes
+  become_user: postgres
+  become_method: sudo
+
+        #    - name: Install PostgreSQL client
+        #ansible.builtin.apt:
+        # name: postgresql-client
+        #state: present
+
+          #    - name: Use psql to log in to the PostgreSQL database
+          #command: "psql -U test -d my_db -h localhost -W"
+          #delegate_to: localhost
+          
+
+

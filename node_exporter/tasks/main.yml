@@ -1,0 +1,3 @@
+---
+# tasks file for node_exporter
+- import_tasks: debian.yml

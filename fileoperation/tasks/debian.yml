@@ -1,0 +1,21 @@
+- name: Check if the source file exists
+  stat:
+    path: "{{ source_file_path }}"
+  register: source_file_status
+  ignore_errors: yes  
+
+- name: Determine whether to copy or create a file
+  set_fact:
+    copy_file: "{{ source_file_status.stat.exists }}"
+  when: source_file_status.stat.exists is defined
+
+- name: Create a new file if the source file doesn't exist
+  command: touch "{{ source_file_path }}"
+  when: not copy_file|default(false)
+
+- name: Copy the source file to the destination
+  copy:
+    src: "{{ source_file_path }}"
+    dest: "{{ destination_file_path }}"
+  when: copy_file|default(false)
+

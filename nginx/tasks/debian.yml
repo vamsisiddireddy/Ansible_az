@@ -1,0 +1,27 @@
+# roles/nginx_config/tasks/main.yml
+- name: Update and upgrade packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Create Nginx Virtual Host
+  template:
+    src: virtualhostconf.j2
+    dest: /etc/nginx/sites-available/{{ item.name }}
+  notify: Reload Nginx
+  with_items: "{{ virtualhosts }}"
+
+- name: Create symbolic link for Nginx Virtual Host
+  file:
+    src: "/etc/nginx/sites-available/{{ item.name }}"
+    dest: "/etc/nginx/sites-enabled/{{ item.name }}"
+    state: link
+  notify: Reload Nginx
+  with_items: "{{ virtualhosts }}"
+- name: unlink the default rules
+  command: "unlink /etc/nginx/sites-enabled/default"
+  ignore_errors: yes

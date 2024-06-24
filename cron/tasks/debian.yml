@@ -1,0 +1,12 @@
+- name: Add a cron job
+  cron:
+    name: "my_cron_job"  
+    minute: "0"
+    hour: "12"
+    day: "*"
+    month: "*"
+    weekday: "*"
+    job: "/home/ec2-user/cron.sh"  
+      #user: akhil  
+      #state: present  
+

@@ -1,0 +1,4 @@
+---
+# defaults file for prometheus
+url: "https://github.com/prometheus/prometheus/releases/download/v{{ version }}/prometheus-2.37.6.linux-amd64.tar.gz"
+version: 2.37.6

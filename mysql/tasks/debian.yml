@@ -1,0 +1,45 @@
+---
+- name: Update apt package cache
+  apt:
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install acl
+  apt:
+    name: acl
+    state: present
+
+- name: Install MySQL server and Python MySQL packages
+  package:
+    name:
+      - mysql-server
+      - python3-mysqldb
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Start MySQL service
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+  when: ansible_os_family == 'Debian'
+
+# - name: Secure MySQL installation
+#   command: mysql_secure_installation
+#   become: yes
+
+- name: Create MySQL database "my_db"
+  mysql_db:
+    name: my_db
+    state: present
+  become: yes
+
+- name: Ensure the MySQL user exists and grant privileges
+  mysql_user:
+    name: test
+    password: test123
+    priv: '*.*:ALL'
+    host: localhost
+    state: present
+  become: yes
+

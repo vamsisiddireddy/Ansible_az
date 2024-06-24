@@ -1,0 +1,4 @@
+---
+# defaults file for cis-benchmark
+level_1: cis_level1_server
+level_2: cis_level2_server

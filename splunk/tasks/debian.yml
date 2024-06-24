@@ -1,0 +1,16 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: download splunk
+  get_url:
+    url: "{{ splunk_url }}"
+    dest: /tmp
+
+- name: install splunk
+  apt:
+    deb: "/tmp/splunk-{{ version }}-e9494146ae5c-linux-2.6-amd64.deb"
+
+- name: Set Splunk admin credentials
+  command: "/opt/splunk/bin/splunk start --accept-license --answer-yes  --seed-passwd admin123"

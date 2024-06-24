@@ -1,0 +1,27 @@
+- name: Update apt packages
+  apt:
+    update_cache: yes
+
+- name: Install Java
+  apt:
+    name: openjdk-8-jdk
+    state: latest
+
+- name: Download SonarQube
+  get_url:
+    url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-6.7.7.zip
+    dest: /home/ubuntu
+    mode: '0777'
+
+- name: Installing unzip
+  apt:
+    name: unzip
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Unarchive a file that is already on the remote machine
+  ansible.builtin.unarchive:
+    src: /home/ubuntu/sonarqube-6.7.7.zip
+    dest: /home/ubuntu
+    remote_src: yes
+

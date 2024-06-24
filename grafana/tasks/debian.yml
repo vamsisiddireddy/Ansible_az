@@ -1,0 +1,51 @@
+---
+- name: installing the following packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apt-transport-https
+    - software-properties-common
+
+- name: Ensure the directory exists
+  file:
+    path: /usr/share/keyrings
+    state: directory
+
+- name: Download Grafana GPG key
+  get_url:
+    url: https://apt.grafana.com/gpg.key
+    dest: /usr/share/keyrings/grafana.key
+    mode: '0644'
+
+- name: Add Grafana repository to sources.list.d
+  lineinfile:
+    path: /etc/apt/sources.list.d/grafana.list
+    line: 'deb [signed-by=/usr/share/keyrings/grafana.key] https://apt.grafana.com stable main'
+    create: yes
+
+- name: update package and install Grafana
+  apt:
+    update_cache: yes
+    name: grafana
+
+- name: Just force systemd to reread configs 
+  systemd_service:
+    daemon_reload: true
+
+- name: Enable service grafana and ensure it is not masked
+  systemd_service:
+    name: grafana-server
+    enabled: true
+
+- name: Make sure a service unit is running
+  systemd_service:
+    state: started
+    name: grafana-server
+
+- name: check required version of prometheus
+  command: "grafana-cli --version"
+  register: grafana_version
+
+- debug: 
+    var: grafana_version.stdout_lines

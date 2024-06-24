@@ -1,0 +1,87 @@
+- name: Executing main playbook
+  hosts: all
+  become: yes
+  roles:
+  - name: nginx
+    tags:
+    - nginx
+  - name: tomcat
+    tags:
+    - tomcat
+  - name: dotnet
+    tags:
+    - dotnet
+  - name: php
+    tags:
+    - php
+  - name: usercreation
+    tags:
+    - usercreation
+
+  - name: packageinstallation
+    tags:
+    - packageinstallation
+
+  - name: fileoperation
+    tags:
+    - fileoperation
+
+  - name: directory
+    tags:
+    - directory
+
+  - name: cron
+    tags:
+    - cron
+
+  - name: java
+    tags:
+    - java
+
+  - name: python
+    tags:
+    - python
+
+  - name: jenkins
+    tags:
+    - jenkins
+
+  - name: nexus
+    tags:
+    - nexus
+
+  - name: cis-benchmark
+    tags:
+    - cis-benchmark
+    
+  - name: splunk
+    tags:
+    - splunk
+
+  - name: prometheus
+    tags:
+      - prometheus
+
+  - name: node_exporter
+    tags:
+      - node_exporter
+
+  - name: grafana
+    tags:
+      - grafana
+
+  - name: node
+    tags:
+      - node
+
+  - name: maven
+    tags:
+      - maven
+
+  - name: elk
+    tags:
+      - elk
+
+  - name: apache
+    tags:
+      - apache

@@ -1,0 +1,27 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install unzip
+  apt:
+    name: unzip
+    state: present
+
+- name: Download Terraform
+  get_url:
+    url: "https://releases.hashicorp.com/terraform/1.6.3/terraform_1.6.3_linux_amd64.zip"
+    #url: "https://releases.hashicorp.com/terraform/0.15.5/terraform_0.15.5_linux_amd64.zip"
+    dest: /tmp/terraform.zip
+
+- name: Extract Terraform
+  unarchive:
+    src: /tmp/terraform.zip
+    dest: /usr/local/bin/
+    remote_src: yes
+    creates: /usr/local/bin/terraform
+
+- name: Set Terraform permissions
+  file:
+    path: /usr/local/bin/terraform
+    mode: 0755
+

@@ -1,0 +1,3 @@
+---
+# tasks file for maven
+- import_tasks: debian.yml

@@ -1,0 +1,4 @@
+---
+# defaults file for splunk
+splunk_url: "https://download.splunk.com/products/splunk/releases/{{ version }}/linux/splunk-9.0.5-e9494146ae5c-linux-2.6-amd64.deb"
+version: 9.0.5

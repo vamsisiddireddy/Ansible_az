@@ -1,0 +1,9 @@
+- name: Updating apt package
+  apt:
+    update_cache: yes
+
+
+- name: Installing git
+  apt:
+    name: git
+    state: present

@@ -1,0 +1,3 @@
+---
+# tasks file for cis-benchmark
+- include_tasks: debian.yml

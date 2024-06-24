@@ -1,0 +1,4 @@
+---
+# tasks file for foo
+
+- import_tasks: debian.yml

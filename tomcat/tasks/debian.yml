@@ -1,0 +1,50 @@
+- name: Update and upgrade packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+- name: Create a user
+  user:
+    name: tomcat
+    state: present
+    shell: /bin/bash  
+    createhome: yes
+- name: create a group
+  group:
+    name: tomcat
+    state: present
+- name: install java
+  apt:
+    name: default-jdk
+    state: present
+- name: Create a Tomcat Directory
+  file:
+    path: /opt/tomcat
+    owner: tomcat
+    group: tomcat
+    recurse: yes
+- name: download & unarchive tomcat10 
+  unarchive:
+    src: "{{ url }}"
+    dest: /opt/tomcat
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+- name: create a service file for tomcat
+  template:
+    src: service.j2
+    dest: /etc/systemd/system/tomcat.service
+  notify: triggered
+- name: Copy configuration file
+  template:
+    src: conf.j2
+    dest: "/opt/tomcat/conf/tomcat-users.xml"
+  notify: triggered
+- name: Copy configuration file
+  template:
+    src: conf1.j2
+    dest: "/opt/tomcat/webapps/manager/META-INF/context.xml"
+  notify: triggered
+- name: Copy configuration file
+  template:
+    src: conf2.j2
+    dest: "/opt/tomcat/webapps/host-manager/META-INF/context.xml"
+  notify: triggered

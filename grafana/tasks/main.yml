@@ -1,0 +1,3 @@
+---
+# tasks file for grafana
+- import_tasks: debian.yml

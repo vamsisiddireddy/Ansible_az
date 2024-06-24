@@ -1,0 +1,5 @@
+---
+# defaults file for Dotnet
+dotnet_version: "6"
+dotnet_version_amazon: "6.0"
+req_version: "6.0.123"

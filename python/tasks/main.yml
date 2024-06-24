@@ -1,0 +1,5 @@
+---
+# tasks file for python
+
+- import_tasks: debian.yml
+  when: ansible_os_family == "Debian"

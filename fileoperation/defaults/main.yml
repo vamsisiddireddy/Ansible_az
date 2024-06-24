@@ -1,0 +1,5 @@
+---
+# defaults file for foo
+source_file_path: /home/ubuntu/oldfile
+
+destination_file_path: /home/ubuntu/newfile

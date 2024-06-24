@@ -1,0 +1,37 @@
+---
+- name: Create prometheus user
+  user:
+    name: prometheus
+    shell: /bin/false
+    system: yes
+
+- name: Change file ownership, group, and permissions
+  file:
+    path: "{{ item }}"
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+  loop:
+    - /etc/prometheus
+    - /var/lib/prometheus
+
+- name: To run Prometheus as a service
+  template:
+    src: prometheus.j2
+    dest: /etc/systemd/system/prometheus.service
+    mode: '0755'
+
+- name: Just force systemd to reread configs 
+  systemd_service:
+    daemon_reload: true
+
+- name: Enable service prometheus and ensure it is not masked
+  systemd_service:
+    name: prometheus
+    enabled: true
+
+- name: Make sure a service unit is running
+  systemd_service:
+    state: started
+    name: prometheus
+

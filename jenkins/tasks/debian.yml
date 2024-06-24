@@ -1,0 +1,31 @@
+- name: Update package cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install Java {{ java_version }}
+  ansible.builtin.apt:
+    name: openjdk-{{ java_version }}-jdk
+    state: present
+
+- name: Set Java {{ java_version }} as the default Java version
+  ansible.builtin.shell: update-java-alternatives -s /usr/lib/jvm/java-1.{{ java_version }}.0-openjdk-amd64
+
+- name: Add Jenkins APT repository key
+  ansible.builtin.apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    state: present
+
+- name: Add Jenkins APT repository
+  ansible.builtin.apt_repository:
+    repo: deb http://pkg.jenkins.io/debian-stable binary/
+
+- name: Install Jenkins
+  ansible.builtin.apt:
+    name: jenkins
+    state: present
+
+- name: Start Jenkins service
+  ansible.builtin.service:
+    name: jenkins
+    state: started
+    enabled: yes

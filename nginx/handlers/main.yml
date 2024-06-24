@@ -1,0 +1,8 @@
+---
+# handlers file for nginx
+# roles/nginx_config/handlers/main.yml
+- name: Reload Nginx
+  service:
+    name: nginx
+    state: reloaded
+

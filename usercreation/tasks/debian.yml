@@ -1,0 +1,5 @@
+- name: creating new user
+  user:
+    name: "{{ new_user }}"
+    state: present
+

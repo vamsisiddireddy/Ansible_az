@@ -1,0 +1,10 @@
+---
+# defaults file for nginx
+virtualhosts:
+  - name: example1.com
+    server_name: example1.com www.example1.com
+    document_root: /var/www/example1
+
+  - name: example2.com
+    server_name: example2.com www.example2.com
+    document_root: /var/www/example2

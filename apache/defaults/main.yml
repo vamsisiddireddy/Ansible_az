@@ -1,0 +1,9 @@
+---
+# defaults file for apache
+apache_vhosts:
+  - name: example1.com
+    port: 80
+    document_root: /var/www/example1.com
+  - name: example2.com
+    port: 80
+    document_root: /var/www/example2.com

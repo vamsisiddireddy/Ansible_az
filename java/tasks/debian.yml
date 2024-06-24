@@ -1,0 +1,13 @@
+- name: updating system
+  apt:
+    update_cache: yes
+
+
+- name: installing java
+  apt:
+    name: "openjdk-{{ version }}-jdk"
+    state: present
+
+- name: updating java version
+  command: "sudo update-alternatives --set java /usr/lib/jvm/java-{{ version }}-openjdk-amd64/bin/java"
+  ignore_errors: yes

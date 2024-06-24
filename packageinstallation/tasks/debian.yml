@@ -1,0 +1,10 @@
+- name: update system
+  become: true
+  apt:
+    update_cache: yes
+
+- name: installing package
+  apt:
+    name: "{{ package_name }}"
+    state: present
+

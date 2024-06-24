@@ -1,0 +1,20 @@
+- name: Check if the directory exists
+  stat:
+    path: "{{ target_directory }}"
+  register: directory_status
+  ignore_errors: yes  
+
+- name: Create the directory if it doesn't exist
+  file:
+    path: "{{ target_directory }}"
+    state: directory
+  when: not directory_status.stat.exists
+
+- debug:
+    msg: "Directory {{ target_directory }} already exists."
+  when: directory_status.stat.exists
+
+- debug:
+    msg: "Directory {{ target_directory }} has been created."
+  when: not directory_status.stat.exists
+

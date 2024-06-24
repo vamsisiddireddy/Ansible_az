@@ -1,0 +1,50 @@
+---
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Installing git
+  apt:
+    name: git
+    state: present
+
+- name: Clone ecomm repository
+  git:
+    dest: /var/www/html
+    repo: https://github.com/ravi2krishna/food.git
+    force: yes
+
+- name: Copy cert.crt file
+  ansible.builtin.copy:
+    src: /home/ubuntu/certificate.crt
+    dest: /etc/ssl/private
+    remote_src: yes
+
+- name: Copy priv.key file
+  ansible.builtin.copy:
+    src: /home/ubuntu/private.key
+    dest: /etc/ssl/private
+    remote_src: yes
+
+- name: Set permissions on the file
+  ansible.builtin.file:
+    path: /etc/ssl/private/certificate.crt
+    mode: "0600"
+
+- name: Insert lines into nginx default file
+  blockinfile:
+    path: /etc/nginx/sites-enabled/default
+    # marker: "# {mark} ANSIBLE MANAGED BLOCK - Start/End"
+    insertafter: '^(\s+)listen 80'
+    block: |
+      # ssl on;
+      listen 443 ssl;
+
+      ssl_certificate /etc/ssl/private/certificate.crt;
+      ssl_certificate_key /etc/ssl/private/private.key;
+
+- name: Restarting nginx
+  service:
+    name: nginx
+    state: restarted

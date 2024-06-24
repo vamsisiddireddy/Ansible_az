@@ -1,0 +1,18 @@
+- name: Ensure OpenSSL is installed
+  apt:
+    name: openssl
+    state: present
+
+- name: Generate Private Key
+  command: openssl genpkey -algorithm RSA -out private.key
+  args:
+    chdir: "/home/ubuntu/"
+
+- name: Generate CSR
+  command: openssl req -new -key private.key -out certificate.csr -subj "/C=IN/ST=TS/L=HYD/O=MotivityLabs/CN=motivity.ltd"
+  args:
+    chdir: "/home/ubuntu/"
+
+- name: Display CSR content
+  command: cat certificate.csr
+

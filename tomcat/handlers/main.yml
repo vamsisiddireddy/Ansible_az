@@ -1,0 +1,7 @@
+---
+# handlers file for tomcat
+- name: triggered
+  systemd:
+    name: tomcat
+    state: started
+    daemon_reload: true

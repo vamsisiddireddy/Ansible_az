@@ -1,0 +1,24 @@
+- name: Update and upgrade packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+- name: Install necessary packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - software-properties-common
+    - ca-certificates
+    - lsb-release
+    - apt-transport-https
+- name: Add PHP Repo
+  ansible.builtin.apt_repository:
+    repo: ppa:ondrej/php
+- name: update cache
+  apt:
+    update_cache: yes
+- name: Install required php version
+  apt:
+    name: php{{req_version}}
+- name: Switch required version 
+  command: "sudo update-alternatives --set php /usr/bin/php{{req_version}}"

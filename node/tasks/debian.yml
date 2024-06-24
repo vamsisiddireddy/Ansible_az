@@ -1,0 +1,47 @@
+- name: Update apt cache (for Ubuntu/Debian)
+  apt:
+    update_cache: yes
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install curl and other required packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - curl
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install required packages
+  apt:
+    name:
+      - build-essential
+      - libssl-dev
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install NVM
+  shell: |
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+    source ~/.bashrc
+  when: ansible_distribution == 'Ubuntu'
+  args:
+    executable: /bin/bash
+
+- name: Add GPG key for Node.js "{{ node_version }}" repository
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+
+- name: Add Node.js "{{ node_version }}" repository
+  apt_repository:
+    repo: "deb https://deb.nodesource.com/node_{{ node_version }}.x {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: yes
+
+- name: Install Node.js "{{ node_version }}"
+  apt:
+    name: nodejs
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+

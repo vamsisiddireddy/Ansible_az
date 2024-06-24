@@ -1,0 +1,42 @@
+- name: Update apt package cache
+  apt:
+    update_cache: yes
+
+- name: Upgrade all packages
+  apt:
+    upgrade: yes
+    autoremove: yes
+
+- name: Install ubuntu-advantage-tools
+  apt:
+    name: ubuntu-advantage-tools
+    state: present
+
+- name: Enable usg by using ua client
+  command: "ua enable usg"
+  ignore_errors: yes
+
+- name: Update SSHd configuration
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication yes'
+
+- name: restart ssh and sshd service
+  service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - ssh
+    - sshd
+- name: Install usg package
+  apt:
+    name: usg
+    state: present
+
+- name: Audit Ubuntu system for CIS compliance
+  command: "usg audit {{ level_2 }}"
+
+- name: Fix CIS required Level server audit findings
+  command: "usg fix {{ level_2 }}"
+

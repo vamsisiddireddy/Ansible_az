@@ -1,0 +1,13 @@
+---
+- name: Update and upgrade packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+- name: Install .NET Core
+  apt:
+    name: "dotnet{{ dotnet_version }}"
+    state: present
+- name: configuring required version of Dotnet
+  template:
+    src: /home/vamsi/Dotnet/templates/version.j2
+    dest: /home/vamsi/global.json

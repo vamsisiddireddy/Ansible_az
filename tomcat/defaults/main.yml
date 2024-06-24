@@ -1,0 +1,4 @@
+---
+# defaults file for tomcat
+url: "https://dlcdn.apache.org/tomcat/tomcat-9/v{{ version }}/bin/apache-tomcat-{{ version }}.tar.gz"
+version: 9.0.86

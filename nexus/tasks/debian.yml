@@ -1,0 +1,59 @@
+- name: Update package cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install Java {{ java_version }}
+  ansible.builtin.apt:
+    name: openjdk-{{ java_version }}-jdk
+    state: present
+
+- name: Set Java {{ java_version }} as the default Java version
+  ansible.builtin.shell: update-java-alternatives -s /usr/lib/jvm/java-1.{{ java_version }}.0-openjdk-amd64
+
+- name: Ensure Nexus directory exists
+  ansible.builtin.file:
+    path: /opt/nexus
+    state: directory
+
+- name: Download and Extract Nexus
+  ansible.builtin.unarchive:
+    src: "{{ nexus_url }}"
+    dest: /opt/nexus
+    remote_src: yes
+
+- name: Find Nexus directory
+  ansible.builtin.find:
+    paths: /opt/nexus
+    recurse: yes
+    patterns: 'nexus-*'
+    file_type: directory
+  register: nexus_dir
+
+- name: Rename Nexus directory
+  ansible.builtin.command:
+    cmd: mv "{{ nexus_dir.files[0].path }}" /opt/nexus/nexus
+  when: nexus_dir.matched > 0
+
+- name: Create Nexus user
+  ansible.builtin.user:
+    name: nexus
+    home: /opt/nexus/nexus
+
+- name: Set Nexus user as the owner of the Nexus directory
+  ansible.builtin.file:
+    path: /opt/nexus
+    owner: nexus
+    group: nexus
+    recurse: yes
+
+- name: Configure Nexus systemd service
+  ansible.builtin.template:
+    src: nexus.service
+    dest: /etc/systemd/system/nexus.service
+
+- name: Start Nexus Service
+  ansible.builtin.service:
+    name: nexus
+    enabled: yes
+    state: started
+    daemon_reload: true

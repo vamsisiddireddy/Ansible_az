@@ -1,0 +1,5 @@
+---
+# tasks file for postgres
+
+
+- import_tasks: debian.yml
